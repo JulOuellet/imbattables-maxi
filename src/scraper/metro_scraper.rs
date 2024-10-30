@@ -13,7 +13,7 @@ impl MetroScraper {
     pub fn new() -> Self {
         MetroScraper {
             client: Client::new(),
-            base_url: "https://www.metro.ca/epicerie-en-ligne/circulaire".to_string()
+            base_url: "https://www.metro.ca/epicerie-en-ligne/circulaire-et-speciaux".to_string()
         }
     }
 }
@@ -32,7 +32,8 @@ impl Scraper for MetroScraper {
     }
 
     async fn scrape_products(&self) -> Result<(), Box<dyn std::error::Error>> {
-        let document = self.fetch_page(&self.base_url).await?;
+        let url = format!("{}/fruits-et-legumes?sortOrder=name-asc", self.base_url);
+        let document = self.fetch_page(&url).await?;
         let test_selector = Selector::parse("div.default-product-tile").unwrap();
 
         for element in document.select(&test_selector) {
